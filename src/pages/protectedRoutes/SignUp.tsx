@@ -68,6 +68,7 @@ const SignUp = () => {
   };
 
   const passwordStrength = checkPasswordStrength(password);
+  const strengthPercentage = (passwordStrength.filter(req => req.valid).length / passwordStrength.length) * 100;
 
   return (
     <section className="flex flex-col md:flex-row gap-4 border border-blue-500 h-[45em] mt-20 mb-20 mx-auto rounded-2xl w-[70%]">
@@ -155,6 +156,14 @@ const SignUp = () => {
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
+            <div className="absolute inset-y-0 right-12 flex items-center">
+              <div className="w-24 h-2 bg-gray-300 rounded-full overflow-hidden">
+                <div
+                  className={`h-full ${strengthPercentage === 100 ? 'bg-green-500' : 'bg-yellow-500'}`}
+                  style={{ width: `${strengthPercentage}%` }}
+                ></div>
+              </div>
+            </div>
           </div>
           {errors.password && (
             <p className="text-red-400 text-sm">{errors.password.message}</p>
@@ -163,6 +172,7 @@ const SignUp = () => {
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Confirm Password *"
+            disabled={password === ""}
             {...register('confirmPassword')}
             className="w-full h-12 px-4 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
