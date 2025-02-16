@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import {  z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FaGithub, FaEye, FaEyeSlash, FaCheck } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Tooltip } from '../../components';
+import { useAuth } from '../../hooks/useAuth';
+import { toast } from 'react-toastify';
 
 const schema = z
   .object({
@@ -32,10 +34,12 @@ const schema = z
     path: ['confirmPassword'],
   });
 
+  
 type FormData = z.infer<typeof schema>;
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const { signupuser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState('');
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -48,9 +52,25 @@ const SignUp = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: FormData) => {
+  //pass the user data to the user endpoint
+  const onSubmit = async (data: FormData) => {
     console.log('Form Data:', data);
-    navigate('/verify-otp');
+  try {
+    const response = await signupuser(data.email, data.password);
+    console.log(response)
+    if (response?.status == 201) {
+      // Show success toast
+      toast.success(`${response.data.message}`);
+      navigate('/verify-otp');
+    } else {
+      // Show error toast if response is undefined
+      toast.error('Signup failed. Please try again.');
+    }
+  } catch (error) {
+    // Show error toast if there's an exception
+    toast.error('Signup failed. Please try again.');
+    console.error('Signup failed:', error);
+  }
   };
 
   const checkPasswordStrength = (password: string) => {
@@ -68,7 +88,10 @@ const SignUp = () => {
   };
 
   const passwordStrength = checkPasswordStrength(password);
-  const strengthPercentage = (passwordStrength.filter(req => req.valid).length / passwordStrength.length) * 100;
+  const strengthPercentage =
+    (passwordStrength.filter((req) => req.valid).length /
+      passwordStrength.length) *
+    100;
 
   return (
     <section className="flex flex-col md:flex-row gap-4 border border-blue-500 h-[45em] mt-20 mb-20 mx-auto rounded-2xl w-[70%]">
@@ -133,7 +156,7 @@ const SignUp = () => {
                       key={index}
                       className={`text-sm flex gap-2 ${req.valid ? 'text-green-500' : 'text-red-500'}`}
                     >
-                      <FaCheck/>
+                      <FaCheck />
                       {req.message}
                     </li>
                   ))}
@@ -172,7 +195,7 @@ const SignUp = () => {
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Confirm Password *"
-            disabled={password === ""}
+            disabled={password === ''}
             {...register('confirmPassword')}
             className="w-full h-12 px-4 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />

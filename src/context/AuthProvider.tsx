@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import AuthContext from "./AuthContext";
-import { getMe, login, logout } from "..//service/api";
+import { getMe, login, logout,SignUp,VerifyOtp} from "..//service/api";
+import {Loading} from "../components"
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<{ id: string; email: string } | null>(null);
@@ -26,17 +27,41 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
   }, []);
 
+const signupuser = async (email:string,password:string)=>{
+  try {
+    const response = await SignUp(email, password);
+    return response;
+  } catch (error) {
+    console.log("DEBUG: error in signup user", error);
+    return undefined;
+  }
+  }
+
   const loginUser = async (email: string, password: string) => {
     try {
-      await login(email, password);
+      const response  = await login(email, password);
       const userData = await getMe();
       setUser(userData);
       setIsAuthenticated(true);
+      return response
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
     }
   };
+
+  const Verify_Otp = async (otp:string)=>{
+    try {
+      console.log(otp,"DEBUG:otp accepted in the auth provider")
+      await VerifyOtp(otp);
+      const userData = await getMe();
+      setUser(userData);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error("Verify Otp Failed:", error);
+      throw error;
+    }
+  }
 
   const logoutUser = async () => {
     try {
@@ -50,12 +75,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Add a proper loading state
+    return <Loading/> 
   }
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, loginUser, logoutUser }}
+      value={{ user, isAuthenticated, loginUser, logoutUser,signupuser,Verify_Otp }}
     >
       {children}
     </AuthContext.Provider>

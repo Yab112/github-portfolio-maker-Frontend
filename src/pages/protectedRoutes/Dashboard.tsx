@@ -1,9 +1,9 @@
-
+import {Layout,ReadmeGenerator } from '../../components';
 const Dashboard = () => {
   return (
-    <div>
-      <h1>dashboard</h1>
-    </div>
+    <Layout>
+      <ReadmeGenerator />
+    </Layout>
   )
 }
 
