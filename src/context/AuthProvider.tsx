@@ -27,9 +27,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
   }, []);
 
-const signupuser = async (email:string,password:string)=>{
+const signupuser = async (email:string,password:string,GithubUsername:string)=>{
   try {
-    const response = await SignUp(email, password);
+    const response = await SignUp(email, password,GithubUsername);
     return response;
   } catch (error) {
     console.log("DEBUG: error in signup user", error);
@@ -74,13 +74,15 @@ const signupuser = async (email:string,password:string)=>{
     }
   };
 
+
+
   if (loading) {
     return <Loading/> 
   }
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, loginUser, logoutUser,signupuser,Verify_Otp }}
+      value={{ user, isAuthenticated, loginUser, logoutUser,signupuser,Verify_Otp}}
     >
       {children}
     </AuthContext.Provider>

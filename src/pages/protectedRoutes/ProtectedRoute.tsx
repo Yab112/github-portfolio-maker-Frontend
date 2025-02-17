@@ -8,6 +8,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   }
+  
 
   return children;
 };

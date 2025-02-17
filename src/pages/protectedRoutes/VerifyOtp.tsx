@@ -3,10 +3,11 @@ import { useState, useRef, type ChangeEvent, type KeyboardEvent } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate } from 'react-router-dom';
 
 const OTPVerification: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation(); 
   const [otp, setOtp] = useState<string[]>(Array(6).fill(''));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const {Verify_Otp} = useAuth()
@@ -35,8 +36,14 @@ const OTPVerification: React.FC = () => {
     
     try {
       await Verify_Otp(otpString);
-      navigate('/dashboard');
-      toast.success("OTP Verified Successfully!");
+      if (location.state?.from === 'signup') {
+        navigate('/login');  
+        toast.success("OTP Verified Successfully,login to continue please!");
+      } else {
+        navigate('/dashboard'); 
+        toast.success("OTP Verified Successfully,user logged in!");
+      }
+      
     } catch (error) {
       console.error("OTP Verification Failed:", error);
       toast.error(`OTP verification failed: ${error || error}`);

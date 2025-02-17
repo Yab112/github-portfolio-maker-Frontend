@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 
 const schema = z
   .object({
+    GithubUsername :z.string().nonempty("githubusername is empty"),
     email: z.string().nonempty('Email is required').email('Invalid email'),
     password: z
       .string()
@@ -56,12 +57,12 @@ const SignUp = () => {
   const onSubmit = async (data: FormData) => {
     console.log('Form Data:', data);
   try {
-    const response = await signupuser(data.email, data.password);
+    const response = await signupuser(data.email, data.password,data.GithubUsername);
     console.log(response)
     if (response?.status == 201) {
       // Show success toast
       toast.success(`${response.data.message}`);
-      navigate('/verify-otp');
+      navigate('/verify-otp', { state: { from: 'signup' } });
     } else {
       // Show error toast if response is undefined
       toast.error('Signup failed. Please try again.');
@@ -138,6 +139,7 @@ const SignUp = () => {
               Continue With GitHub
             </span>
           </div>
+
           <input
             type="text"
             placeholder="Email *"
@@ -146,7 +148,18 @@ const SignUp = () => {
           />
           {errors.email && (
             <p className="text-red-400 text-sm">{errors.email.message}</p>
+
           )}
+          <input
+            type="text"
+            placeholder="github user name *"
+            {...register('GithubUsername')}
+            className="w-full h-12 px-4 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.GithubUsername && (
+            <p className="text-red-400 text-sm">{errors.GithubUsername.message}</p>
+          )}
+
           <div className="relative w-full mb-4">
             <Tooltip
               text={

@@ -40,8 +40,8 @@ const Login = () => {
       const response =  await loginUser(data.email,data.password)
       
       if (response?.status == 200){
-        navigate('/verify-otp');
-        toast.success("User Loggedin!", {
+        navigate('/verify-otp', { state: { from: 'login' } });
+        toast.success("OTP send to you email!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -51,7 +51,7 @@ const Login = () => {
         });
       }
     } catch (error) {
-      toast.error(`${error}`, {
+      toast.error(`Email or password is incorrect`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -59,6 +59,7 @@ const Login = () => {
         pauseOnHover: false,
         draggable: true,
       })
+      console.log("DEBUG:ERROR IN LOGIN",error)
     }
     
   };

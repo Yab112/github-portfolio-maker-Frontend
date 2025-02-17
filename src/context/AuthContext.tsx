@@ -11,7 +11,7 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   loginUser: (email: string, password: string) => Promise<AxiosResponse<ApiResponse> | undefined>;
   logoutUser: () => Promise<void>;
-  signupuser : (email: string, password: string) => Promise<AxiosResponse<ApiResponse> | undefined>
+  signupuser : (email: string, password: string,GithubUsername:string) => Promise<AxiosResponse<ApiResponse> | undefined>
   Verify_Otp :(otp:string) => Promise<void>
 }
 
