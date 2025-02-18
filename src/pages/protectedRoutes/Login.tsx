@@ -40,8 +40,8 @@ const Login = () => {
       const response =  await loginUser(data.email,data.password)
       
       if (response?.status == 200){
-        navigate('/verify-otp', { state: { from: 'login' } });
-        toast.success("OTP send to you email!", {
+        navigate('/dashboard')
+        toast.success("User Logged in Successfully!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -62,6 +62,10 @@ const Login = () => {
       console.log("DEBUG:ERROR IN LOGIN",error)
     }
     
+  };
+
+  const loginWithGitHub = () => {
+    window.location.href = "http://localhost:3001/api/v1/auth/github";
   };
 
   const togglePasswordVisibility = () => {
@@ -91,7 +95,7 @@ const Login = () => {
           </p>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-sm p-2">
-          <div className="items-center flex gap-12 mb-4 cursor-pointer border border-gray-300 rounded-lg p-2 bg-blue-900/90">
+          <div className="items-center flex gap-12 mb-4 cursor-pointer border border-gray-300 rounded-lg p-2 bg-blue-900/90" onClick={loginWithGitHub}>
             <FaGithub className="text-2xl text-gray-200" />
             <span className="text-gray-200 font-semibold">
               Continue With GitHub

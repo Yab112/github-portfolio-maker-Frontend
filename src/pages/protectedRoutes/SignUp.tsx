@@ -40,7 +40,7 @@ type FormData = z.infer<typeof schema>;
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { signupuser } = useAuth();
+  const { signupUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState('');
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -57,12 +57,12 @@ const SignUp = () => {
   const onSubmit = async (data: FormData) => {
     console.log('Form Data:', data);
   try {
-    const response = await signupuser(data.email, data.password,data.GithubUsername);
+    const response = await signupUser(data.email, data.password,data.GithubUsername);
     console.log(response)
     if (response?.status == 201) {
       // Show success toast
       toast.success(`${response.data.message}`);
-      navigate('/verify-otp', { state: { from: 'signup' } });
+      navigate('/verify-otp');
     } else {
       // Show error toast if response is undefined
       toast.error('Signup failed. Please try again.');
@@ -73,6 +73,11 @@ const SignUp = () => {
     console.error('Signup failed:', error);
   }
   };
+
+  const loginWithGitHub = () => {
+    window.location.href = "http://localhost:3001/api/v1/auth/github";
+  };
+  
 
   const checkPasswordStrength = (password: string) => {
     const requirements = [
@@ -133,7 +138,7 @@ const SignUp = () => {
             )}
           </div>
 
-          <div className="items-center flex gap-12 mb-4 cursor-pointer border border-gray-300 rounded-lg p-2 bg-blue-900/90">
+          <div className="items-center flex gap-12 mb-4 cursor-pointer border border-gray-300 rounded-lg p-2 bg-blue-900/90" onClick={loginWithGitHub}>
             <FaGithub className="text-2xl text-gray-200" />
             <span className="text-gray-200 font-semibold">
               Continue With GitHub

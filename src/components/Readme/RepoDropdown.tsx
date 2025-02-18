@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 
-interface Repository {
-  name: string;
-  updated: string;
-  stars: number;
-}
-
 interface RepoDropdownProps {
-  repositories: Repository[];
+  repositories: string[]; 
   selectedRepo: string;
   onSelect: (repo: string) => void;
 }
 
-const RepoDropdown: React.FC<RepoDropdownProps> = ({ repositories, onSelect }) => {
+const RepoDropdown: React.FC<RepoDropdownProps> = ({ 
+  repositories, 
+  onSelect, 
+  selectedRepo 
+}) => {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredRepos = repositories.filter((repo) =>
-    repo.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredRepos = repositories.filter(repo =>
+    repo.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -35,18 +33,16 @@ const RepoDropdown: React.FC<RepoDropdownProps> = ({ repositories, onSelect }) =
 
         {/* Repository List with Scroll Effect */}
         <div className="max-h-48 overflow-y-auto">
-          {filteredRepos.map((repo) => (
+          {filteredRepos.map((repo, index) => (
             <button
-              key={repo.name}
-              className="w-full px-4 py-3 hover:bg-white/20 dark:hover:bg-gray-700/30 transition-colors"
-              onClick={() => onSelect(repo.name)}
+              key={index} // Use index as key since repo names might not be unique
+              className={`w-full px-4 py-3 hover:bg-white/20 dark:hover:bg-gray-700/30 transition-colors ${
+                selectedRepo === repo ? "bg-blue-100/20 dark:bg-blue-800/30" : ""
+              }`}
+              onClick={() => onSelect(repo)}
             >
               <div className="flex justify-between items-center">
-                <span className="text-gray-800 dark:text-gray-200">{repo.name}</span>
-                <div className="flex items-center space-x-4">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">⭐ {repo.stars}</span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">Updated {repo.updated}</span>
-                </div>
+                <span className="text-gray-800 dark:text-gray-200">{repo}</span>
               </div>
             </button>
           ))}

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RepoDropdown from './RepoDropdown';
 import PastePathInput from './PastePathInput';
+import { useAuth } from '../../hooks/useAuth';
+import { toast } from 'react-toastify';
 
 interface ProjectReadmeProps {
   setGeneratedReadme: (readme: string) => void;
@@ -9,15 +11,22 @@ interface ProjectReadmeProps {
 const ProjectReadme: React.FC<ProjectReadmeProps> = ({
   setGeneratedReadme,
 }) => {
+  const { getrepos } = useAuth();
+
   const [selectedRepo, setSelectedRepo] = useState('');
-  const [repos] = useState([
-    { name: 'next-auth-example', updated: '2 days ago', stars: 45 },
-    { name: 'portfolio-site', updated: '5 days ago', stars: 12 },
-    { name: 'react-dashboard', updated: '1 week ago', stars: 78 },
-    { name: 'next-auth-example', updated: '2 days ago', stars: 45 },
-    { name: 'portfolio-site', updated: '5 days ago', stars: 12 },
-    { name: 'react-dashboard', updated: '1 week ago', stars: 78 },
-  ]);
+  const [repos, setrepos] = useState<string[]>([]);
+  useEffect(() => {
+    const fetchRepos = async () => {
+      try {
+        const repositories = await getrepos();
+        setrepos(repositories);
+      } catch (error) {
+        toast(`${error}`);
+      }
+    };
+
+    fetchRepos();
+  }, [getrepos]);
 
   const handleGenerateReadme = () => {
     const readmeContent = selectedRepo
@@ -59,7 +68,7 @@ const ProjectReadme: React.FC<ProjectReadmeProps> = ({
           <button
             onClick={handleGenerateReadme}
             className="mt-6 w-full py-3 px-6 bg-blue-400/80 hover:bg-blue-600/30 text-white dark:text-white rounded-lg shadow-md transition-all duration-300 font-semibold"
-          > 
+          >
             Generate README
           </button>
         </div>
