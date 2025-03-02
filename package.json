@@ -16,6 +16,8 @@
     "@tailwindcss/postcss": "^4.0.3",
     "@tailwindcss/vite": "^4.0.3",
     "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "groq-sdk": "^0.15.0",
     "lucide-react": "^0.474.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

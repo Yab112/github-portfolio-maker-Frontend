@@ -3,6 +3,8 @@ import RepoDropdown from './RepoDropdown';
 import PastePathInput from './PastePathInput';
 import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
+import GithubLoader from '../GithubLoader';
+import { promptdata } from '../../../data/prompt';
 
 interface ProjectReadmeProps {
   setGeneratedReadme: (readme: string) => void;
@@ -11,10 +13,13 @@ interface ProjectReadmeProps {
 const ProjectReadme: React.FC<ProjectReadmeProps> = ({
   setGeneratedReadme,
 }) => {
-  const { getrepos } = useAuth();
+  const { getrepos, fetchRepoFiles, fetchAllRepoFiles, GetHCatResponseApi } =
+    useAuth();
 
   const [selectedRepo, setSelectedRepo] = useState('');
   const [repos, setrepos] = useState<string[]>([]);
+  const [Loading, setLoading] = useState<boolean>(false);
+
   useEffect(() => {
     const fetchRepos = async () => {
       try {
@@ -28,20 +33,57 @@ const ProjectReadme: React.FC<ProjectReadmeProps> = ({
     fetchRepos();
   }, [getrepos]);
 
-  const handleGenerateReadme = () => {
-    const readmeContent = selectedRepo
-      ? `# ${selectedRepo}\n\n...` // Generation logic
-      : 'Please select a repository or provide a package.json path';
-    setGeneratedReadme(readmeContent);
+  const handlegetrepoContents = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchRepoFiles(selectedRepo);
+      if (!response || Object.keys(response).length === 0) {
+        throw new Error('No files found in the repository.');
+      }
+
+      const fileContents = await fetchAllRepoFiles(response);
+      if (!fileContents || Object.keys(fileContents).length === 0) {
+        throw new Error('Error fetching file contents.');
+      }
+
+      toast('Data successfully fetched. Generating README...');
+      const formattedFiles = Object.entries(fileContents)
+        .map(
+          ([filename, content]) =>
+            `### ${filename}\n\`\`\`\n${content.slice(0, 1000)}...\n\`\`\`` // Truncates to 1000 characters
+        )
+        .join('\n\n');
+
+      const finalPrompt = `
+        ${promptdata}
+
+        ## Project Files:
+        ${formattedFiles}
+      `;
+
+      console.log("DEBUG:the finalPrompt looks like",finalPrompt)
+
+      const chatresponse = await GetHCatResponseApi(finalPrompt);
+      if (chatresponse) {
+        setGeneratedReadme(chatresponse);
+        toast.success('README generated successfully');
+      } else {
+        console.error('error in genearating the readme');
+        toast('generating the readme failed');
+      }
+    } catch (error) {
+      toast.error(`❌ ${error}`);
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handlePathSubmit = (path: string) => {
-    const repoName = path.split('/').slice(-2, -1)[0];
-    setSelectedRepo(repoName);
+  const handlePathSubmit = () => {
   };
 
   return (
-    <div className="bg-white/30 dark:bg-transparent rounded-lg shadow-xl p-6 backdrop-blur-md border border-white/20 dark:border-gray-700/50">
+    <div className="bg-white/30 dark:bg-transparent rounded-lg shadow-xl p-6 backdrop-blur-md border border-white/20 dark:border-gray-700/50 realtive">
       <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
         Generate Project README
       </h2>
@@ -66,7 +108,7 @@ const ProjectReadme: React.FC<ProjectReadmeProps> = ({
           </h3>
           <PastePathInput onPathSubmit={handlePathSubmit} />
           <button
-            onClick={handleGenerateReadme}
+            onClick={handlegetrepoContents}
             className="mt-6 w-full py-3 px-6 bg-blue-400/80 hover:bg-blue-600/30 text-white dark:text-white rounded-lg shadow-md transition-all duration-300 font-semibold"
           >
             Generate README
@@ -75,6 +117,12 @@ const ProjectReadme: React.FC<ProjectReadmeProps> = ({
       </div>
 
       {/* Generate README Button */}
+      {Loading && (
+        <div className="absolute inset-0 bg-white/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center rounded-lg">
+          <GithubLoader />
+          <span className="sr-only">Loading repositories...</span>
+        </div>
+      )}
     </div>
   );
 };

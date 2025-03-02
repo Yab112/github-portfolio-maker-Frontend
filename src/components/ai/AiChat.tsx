@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Edit2, Copy } from 'react-feather';
+import { ChatPrompt } from '../../../data/prompt';
+import { useAuth } from '../../hooks/useAuth';
+import {formatMarkdown} from "../../../lib/utils"
 
 interface Message {
   role: 'user' | 'assistant';
@@ -9,31 +12,47 @@ interface Message {
 }
 
 const AiChat: React.FC = () => {
+  const {ChatResponse} = useAuth()
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim()) {
       if (editingIndex !== null) {
         const updatedMessages = [...messages];
-        updatedMessages[editingIndex] = { role: 'user', content: input };
+        updatedMessages[editingIndex] = { role: 'user' as const, content: input };
         setMessages(updatedMessages);
         setEditingIndex(null);
       } else {
-        setMessages([...messages, { role: 'user', content: input }]);
-        setTimeout(() => {
-          setMessages((prev) => [
-            ...prev,
-            { role: 'assistant', content: `Echo: ${input}` },
-          ]);
-        }, 500);
+        const userMessage: Message = { role: 'user', content: input };
+        setMessages((prev: Message[]) => [...prev, userMessage]);
+  
+        const finalPrompt = `
+        ${ChatPrompt}
+  
+        ## User Question:
+        ${input}
+        `;
+  
+        try {
+          const response = await ChatResponse(finalPrompt);
+          if (response) {
+            const formattedResponse = formatMarkdown(response);
+            const assistantMessage: Message = { role: 'assistant', content: formattedResponse };
+            setMessages((prev: Message[]) => [...prev, assistantMessage]);
+          }
+        } catch (error) {
+          console.error("Error fetching response:", error);
+        }
       }
       setInput('');
     }
   };
+  
+  
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -47,7 +66,7 @@ const AiChat: React.FC = () => {
 
   return (
     <div className="bg-white/30 dark:bg-transparent rounded-xl p-8 backdrop-blur-md border border-white/20 dark:border-gray-700/50 shadow-xl w-full max-w-4xl mx-auto">
-      <div className="relative h-[700px] flex flex-col">
+      <div className="relative h-[650px] flex flex-col">
         {/* Chat Display Container */}
         <div
           ref={chatContainerRef}

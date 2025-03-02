@@ -17,6 +17,9 @@ import ProfileReadme from './Readme/ProfileReadme';
 import ProjectReadme from './Readme/ProjectReadme';
 import ReadmePreview from './Readme/ReadmePreview';
 import Layout from './layout/Layout';
+import GithubLoader  from './GithubLoader';
+import Skills from './portfolioMakerComp/Skills';
+import AddOns from './portfolioMakerComp/AddOns';
 
 export {
   Herosection,
@@ -37,5 +40,8 @@ export {
   ProfileReadme,
   ProjectReadme,
   ReadmePreview,
-  Layout
+  Layout,
+  GithubLoader,
+  Skills,
+  AddOns
 };

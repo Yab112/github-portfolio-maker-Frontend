@@ -38,4 +38,30 @@ export interface GithubRepository {
     url: string;
   };
 }
+
+export interface RepoFile  {
+  path: string;
+  mode: string;
+  type: string;
+  sha: string;
+  size: number;
+  url: string;
+};
+
+export interface RepoFilesResponse  {
+  sha: string;
+  url: string;
+  tree: RepoFile[];
+  truncated: boolean;
+};
+
+
+export interface GitHubBlob {
+  sha: string;
+  node_id: string;
+  size: number;
+  url: string;
+  content: string;
+  encoding: string;
+}
   

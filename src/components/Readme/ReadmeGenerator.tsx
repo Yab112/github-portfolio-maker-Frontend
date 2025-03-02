@@ -1,26 +1,28 @@
-import React, { useState } from 'react'
-import { FileCode, User } from '../icons/Icons'
-import ProjectReadme from './ProjectReadme'
-import ProfileReadme from './ProfileReadme'
-import AiChat from '../ai/AiChat'
-import ReadmePreview from './ReadmePreview'
+import React, { useState } from 'react';
+import { FileCode, User } from '../icons/Icons';
+import ProjectReadme from './ProjectReadme';
+import ProfileReadme from './ProfileReadme';
+import AiChat from '../ai/AiChat';
+import ReadmePreview from './ReadmePreview';
 
 const ReadmeGenerator: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'project' | 'profile' | 'ai'>('project')
-  const [generatedReadme, setGeneratedReadme] = useState('')
+  const [activeTab, setActiveTab] = useState<'project' | 'profile' | 'ai'>(
+    'project'
+  );
+  const [generatedReadme, setGeneratedReadme] = useState('');
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'project':
-        return <ProjectReadme setGeneratedReadme={setGeneratedReadme} />
+        return <ProjectReadme setGeneratedReadme={setGeneratedReadme} />;
       case 'profile':
-        return <ProfileReadme setGeneratedReadme={setGeneratedReadme} />
+        return <ProfileReadme setGeneratedReadme={setGeneratedReadme} />;
       case 'ai':
-        return <AiChat />
+        return <AiChat />;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <div className="space-y-4">
@@ -67,10 +69,12 @@ const ReadmeGenerator: React.FC = () => {
       </div>
 
       {renderTabContent()}
-      
-      {activeTab !== "ai" ? generatedReadme && <ReadmePreview readme={generatedReadme} />: ""}
-    </div>
-  )
-}
 
-export default ReadmeGenerator
+      {activeTab !== 'ai'
+        ? generatedReadme && <ReadmePreview readme={generatedReadme} />
+        : ''}
+    </div>
+  );
+};
+
+export default ReadmeGenerator;

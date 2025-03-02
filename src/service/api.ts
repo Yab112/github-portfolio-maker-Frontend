@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 // Create a new instance of axios
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3001/api/v1",
@@ -63,9 +64,17 @@ export const verifyOtp = async (otp: string) => {
   }
 };
 
-// export const GetRepos = () => {
-//   return api.get("/users/github/repos")
-// }
+
+
+export const getChatResponse = async (prompt:string) =>{
+  try {
+    const chatresponse =  api.post("users/chat",{prompt});
+    return chatresponse
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
 
 
 

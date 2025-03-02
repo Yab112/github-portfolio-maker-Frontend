@@ -3,7 +3,7 @@ import { GithubIcon } from "lucide-react";
 
 export default function Header() {
     return (
-        <header className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-sm     ">
+        <header className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-sm">
             <div className="mx-auto px-10  h-16 flex items-center justify-between">
                 <Link to="/" className="flex items-center space-x-2">
                     <GithubIcon className="w-8 h-8 text-blue-600" />

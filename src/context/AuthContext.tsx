@@ -22,6 +22,11 @@ export interface AuthContextType {
   verifyOtpUser: (otp: string) => Promise<void>;
   resendOtp: () => Promise<void>;
   getrepos: () => Promise<string[]>; 
+  fetchRepoFiles : (owner: string) => Promise<{ [key: string]: string } |undefined>
+  fetchFileContent : (fileUrl: string) => Promise<string | undefined>
+  fetchAllRepoFiles: (fileUrls: { [key: string]: string }) => Promise<{ [key: string]: string }>;
+  GetHCatResponseApi: (prompt:string) => Promise<string |undefined>
+  ChatResponse : (prompt:string) => Promise<string |undefined>
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);

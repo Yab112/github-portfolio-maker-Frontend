@@ -1,78 +1,83 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import InfiniteScroll from './InfiniteScroll';
 
 export default function HeroSection() {
   return (
-    <section className="items-center md:pt-32 md:pb-20 min-h-screen">
-      <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+    <section className="relative flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-900 to-blue-700 overflow-hidden">
+      {/* Background Effect */}
+      <div className="absolute inset-0 opacity-30 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500 to-transparent"></div>
+
+      <div className="relative z-10 w-full max-w-7xl px-6 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
+          {/* Left Side (Text Content) */}
           <motion.div
-            className="space-y-8"
+            className="space-y-8 text-white"
             initial={{ opacity: 0, x: -100 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
           >
             <motion.h1
-              className="text-9xl font-bold tracking-tight text-gray-900"
-              style={{ WebkitTextStroke: '2px #2563EB' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
+              className="text-5xl lg:text-7xl font-extrabold tracking-wide"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
             >
-              <motion.span
-                className="inline-block text-transparent bg-clip-text font-outline-2"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1, delay: 0.5 }}
-              >
-                README
-              </motion.span>
-              <br />
-              <motion.span
-                className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 font-outline-2"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1, delay: 1 }}
-              >
+              README <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-300 to-yellow-300">
                 Generator
-              </motion.span>
+              </span>
             </motion.h1>
+
             <motion.p
-              className="text-xl text-blue-600"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 1.5 }}
+              className="text-lg lg:text-xl font-light text-gray-300"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.8 }}
             >
-              Generate README files for your projects with ease
+              Easily generate professional README files for your projects in seconds!
             </motion.p>
-            <Link to="/login">
-              <button className="h-12 px-8 text-lg bg-blue-600 hover:bg-blue-700 text-white rounded-full">
-                Get Started
-              </button>
-            </Link>
+
+            <motion.div
+              className="flex gap-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 1 }}
+            >
+              <Link to="/login">
+                <button className="h-14 px-8 text-lg font-semibold bg-yellow-400 hover:bg-yellow-500 text-black rounded-full shadow-lg transition-all duration-300">
+                  Get Started
+                </button>
+              </Link>
+
+              <Link to="/about">
+                <button className="h-14 px-8 text-lg font-semibold border border-white text-white rounded-full hover:bg-white hover:text-black transition-all duration-300">
+                  Learn More
+                </button>
+              </Link>
+            </motion.div>
           </motion.div>
+
+          {/* Right Side (Image & Effect) */}
           <motion.div
-            className="relative"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="relative flex justify-center"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 1.2 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-500 rounded-2xl transform rotate-2 w-[48em] border border-slate-300"></div>
+            {/* Glowing Effect */}
+            <div className="absolute -top-10 -left-10 w-96 h-96 bg-blue-500 opacity-30 rounded-full filter blur-3xl"></div>
+            <div className="absolute -bottom-10 -right-10 w-96 h-96 bg-yellow-400 opacity-30 rounded-full filter blur-3xl"></div>
+
+            {/* Image */}
             <motion.img
               src="/ream_me.jpg"
-              alt="Tool icon"
-              width={1200}
-              height={1224}
-              className="relative z-10"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
+              alt="README Generator"
+              width={600}
+              height={600}
+              className="relative z-10 rounded-lg shadow-xl border border-white"
             />
           </motion.div>
         </div>
-        <InfiniteScroll />
       </div>
     </section>
   );

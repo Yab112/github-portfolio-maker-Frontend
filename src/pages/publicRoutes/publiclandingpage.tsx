@@ -1,9 +1,9 @@
-import { Herosection, Header, FeaturesSection, HowItWorksSection, Footer, CalltoAction } from '../../components';
+import { Herosection, FeaturesSection, HowItWorksSection, Footer, CalltoAction } from '../../components';
 
 const PublicLandingPage = () => {
   return (
-    <div>
-      <Header />
+    <div className='m-2 mx-auto '>
+      {/* <Header /> */}
       <Herosection />
       <FeaturesSection />
       <HowItWorksSection />

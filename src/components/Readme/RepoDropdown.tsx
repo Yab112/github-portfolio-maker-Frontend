@@ -19,7 +19,7 @@ const RepoDropdown: React.FC<RepoDropdownProps> = ({
 
   return (
     <div className="relative w-96">
-      <div className="backdrop-blur-lg bg-white/30 dark:bg-transparent rounded-lg shadow-lg border border-white/20 dark:border-gray-700/50">
+      <div className="backdrop-blur-lg bg-white/30 dark:bg-transparent rounded-lg shadow-lg border border-white/20 dark:border-blue-700/50">
         {/* Search Input */}
         <div className="p-4 border-b border-white/20 dark:border-gray-700/50">  
           <input
@@ -36,7 +36,7 @@ const RepoDropdown: React.FC<RepoDropdownProps> = ({
           {filteredRepos.map((repo, index) => (
             <button
               key={index} // Use index as key since repo names might not be unique
-              className={`w-full px-4 py-3 hover:bg-white/20 dark:hover:bg-gray-700/30 transition-colors ${
+              className={`w-full px-4 py-3 hover:bg-white/20 dark:hover:bg-blue-400/80 transition-colors ${
                 selectedRepo === repo ? "bg-blue-100/20 dark:bg-blue-800/30" : ""
               }`}
               onClick={() => onSelect(repo)}
