@@ -3,6 +3,8 @@
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "module": "ESNext",
+    "outDir": "dist", 
+    "removeComments": true,
     "moduleResolution": "Bundler",
     "types": ["vite/client", "jest", "@testing-library/jest-dom"],
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
