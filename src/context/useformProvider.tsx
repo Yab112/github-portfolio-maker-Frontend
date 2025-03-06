@@ -6,6 +6,7 @@ interface FormProviderProps {
 }
 
 const FormProvider = ({ children }: FormProviderProps) => {
+  const [generatedReadme, setGeneratedReadme] = useState('');
   const [formData, setFormData] = useState<FormData>({
     personalData: {
       title: '',
@@ -108,6 +109,8 @@ const FormProvider = ({ children }: FormProviderProps) => {
     updateSocialData,
     updateAddOnsData,
     submitForm,
+    generatedReadme, 
+    setGeneratedReadme
   };
 
   return <FormContext.Provider value={value}>{children}</FormContext.Provider>;

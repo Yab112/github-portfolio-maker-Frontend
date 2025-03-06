@@ -53,6 +53,8 @@ export interface FormData {
 
 export interface FormContextType {
   formData: FormData;
+generatedReadme:string,
+  setGeneratedReadme:(generatedReadme:string)=>void,
   updatePersonalData: (personalData: FormData['personalData']) => void;
   updateWorkData: (workData: FormData['work']) => void;
   updateSkillsData: (skillsData: FormData['skills']) => void;

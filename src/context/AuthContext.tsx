@@ -10,7 +10,19 @@ interface ApiResponse {
 export interface UserData {
   id: string;
   email: string;
-  GithubUsername?: string;
+  Githubusername?: string;
+  profilePic?: string;
+  isVerified?: boolean;
+  authProvider?: string;
+  failedLoginAttempts?: number;
+  projects?: Array<{
+    key: string;
+    value: string;
+    _id: string;
+  }>;
+  createdAt?: string;
+  updatedAt?: string;
+  refreshTokenExpires?: string;
 }
 
 export interface AuthContextType {

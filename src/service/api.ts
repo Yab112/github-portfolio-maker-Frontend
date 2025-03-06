@@ -1,5 +1,8 @@
 import axios from "axios";
-
+interface Project {
+  value: string;
+  key: string;
+}
 
 // Create a new instance of axios
 const api = axios.create({
@@ -45,7 +48,7 @@ export const login = (email: string, password: string) => {
 };
 
 export const logout = () => {
-  return api.post("/logout", {});
+  return api.post("auth/logout");
 };
 
 export const SignUp = (email: string, password: string, Githubusername: string) => {
@@ -83,3 +86,19 @@ export const OtpResend = async () => {
    return response;
 }
 
+
+
+export const updateUserProfile = async (newProject:Project) => {
+
+  try {
+      const response = await api.patch('users/update', 
+          { projects: newProject } 
+      );
+
+      console.log('Profile updated:', response.data);
+  } catch (error) {
+    const errorMessage =
+        error instanceof Error ? error.message : 'An unknown error occurred';
+      console.error('Error:', errorMessage);
+  }
+};

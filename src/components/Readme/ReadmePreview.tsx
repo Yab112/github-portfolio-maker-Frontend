@@ -45,7 +45,7 @@ const ReadmePreview: React.FC<ReadmePreviewProps> = ({ readme }) => {
   }
 
   return (
-    <div className="mt-8 border-2 border-cyan-400 rounded-lg p-4 w-full 
+    <div className="mt-8 border-2 border-cyan-400/10 rounded-lg p-4 w-full 
         backdrop-blur-lg bg-gray-900/80 shadow-cyan-400/30 hover:shadow-cyan-400/40 
         transition-all duration-300">
       

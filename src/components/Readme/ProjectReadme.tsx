@@ -5,6 +5,8 @@ import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
 import GithubLoader from '../GithubLoader';
 import { promptdata } from '../../../data/prompt';
+import { prepareProjectData } from '../../../utils/prepareProjectData ';
+import { getMe, updateUserProfile } from '../../service/api';
 
 interface ProjectReadmeProps {
   setGeneratedReadme: (readme: string) => void;
@@ -61,11 +63,26 @@ const ProjectReadme: React.FC<ProjectReadmeProps> = ({
         ${formattedFiles}
       `;
 
-      console.log("DEBUG:the finalPrompt looks like",finalPrompt)
+      console.log('DEBUG:the finalPrompt looks like', finalPrompt);
 
       const chatresponse = await GetHCatResponseApi(finalPrompt);
       if (chatresponse) {
         setGeneratedReadme(chatresponse);
+        const projectData = prepareProjectData(chatresponse,selectedRepo);
+        try {
+          // Send the PATCH request to update the user's profile
+          await updateUserProfile(projectData);
+
+          toast.success('Project updated successfully!');
+          getMe()
+        } catch (error) {
+          toast.error('Error Updating the projects');
+          const errorMessage =
+            error instanceof Error
+              ? error.message
+              : 'An unknown error occurred';
+          console.error(errorMessage);
+        }
         toast.success('README generated successfully');
       } else {
         console.error('error in genearating the readme');
@@ -79,8 +96,7 @@ const ProjectReadme: React.FC<ProjectReadmeProps> = ({
     }
   };
 
-  const handlePathSubmit = () => {
-  };
+  const handlePathSubmit = () => {};
 
   return (
     <div className="bg-white/30 dark:bg-transparent rounded-lg shadow-xl p-6 backdrop-blur-md border border-white/20 dark:border-gray-700/50 realtive">

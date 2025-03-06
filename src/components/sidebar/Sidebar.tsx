@@ -2,16 +2,22 @@ import React from 'react'
 import { Bot, History, Settings, Moon, Sun } from '../icons/Icons'
 import UserProfile from '../userprofile/UserProfile'
 import RecentActivity from '../sidebar/RecentActivity'
+import { useAuth } from '../../hooks/useAuth'
 
 const Sidebar: React.FC = () => {
   const [darkMode, setDarkMode] = React.useState(false)
+  const {logoutUser} = useAuth()
+
+  const handlelogout = () => {
+    logoutUser()
+  }
 
   React.useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode)
   }, [darkMode])
 
   return (
-    <div className="w-64 border-r border-blue-200/30 dark:border-blue-300/30 p-4 flex flex-col gap-4 bg-white/30 dark:bg-gray-800/30 backdrop-blur-md min-h-screen relative">
+    <div className="w-64 border-r border-blue-200/30 dark:border-blue-300/30 p-2 flex flex-col gap-4 bg-white/30 dark:bg-gray-800/30 backdrop-blur-md min-h-screen relative">
       {/* Header Section */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
@@ -43,20 +49,15 @@ const Sidebar: React.FC = () => {
         </button>
         
         <div className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-xl border border-white/20 dark:border-gray-700/50 p-3 h-[calc(100vh-380px)] overflow-y-auto">
-          <h3 className="text-sm font-medium mb-2 text-gray-600/90 dark:text-gray-400/90">
-            Recent Activity
-          </h3>
           <RecentActivity />
         </div>
       </div>
 
-      {/* Fixed Settings at Bottom */}
-      <div className="sticky bottom-0 bg-white/30 dark:bg-gray-800/30 backdrop-blur-md border-t border-white/20 dark:border-gray-700/50 -mx-4 px-4 py-3">
-        <button className="flex items-center gap-2 w-full px-3 py-2 rounded-lg hover:bg-gray-200/30 dark:hover:bg-gray-700/30 transition-colors">
-          <Settings className="h-4 w-4 text-gray-600/80 dark:text-gray-300/80" />
-          <span className="text-gray-700/90 dark:text-gray-300/90">Settings</span>
-        </button>
-      </div>
+      {/* Logout Button */}
+      <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/30 text-white hover:bg-red-600 transition-colors w-full" onClick={handlelogout}>
+        <Settings className="h-4 w-4" />
+        <span>Logout</span>
+      </button>
     </div>
   )
 }

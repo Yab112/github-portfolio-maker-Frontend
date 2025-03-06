@@ -12,7 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
       {/* Sidebar - Fixed */}
-      <div className="w-96 fixed inset-y-0 left-0 z-50 h-screen">
+      <div className="w-[200px] fixed inset-y-0 left-0 z-50 h-screen">
         <Sidebar />
       </div>
 

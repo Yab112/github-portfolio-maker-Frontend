@@ -1,7 +1,7 @@
 'use client';
 
 import type React from 'react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { profileTemplates } from '../../../data/profileTemplates';
 import Skills from '../portfolioMakerComp/Skills';
 import AddOns from '../portfolioMakerComp/AddOns';
@@ -13,6 +13,8 @@ import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
 import GithubLoader from '../GithubLoader';
 import { ReadmePrompt } from '../../../data/prompt';
+import {prepareProjectData} from '../../../utils/prepareProjectData '
+import {updateUserProfile} from "../../service/api"
 
 interface ProfileReadmeProps {
   setGeneratedReadme: (readme: string) => void;
@@ -22,6 +24,7 @@ const ProfileReadme: React.FC<ProfileReadmeProps> = ({
   setGeneratedReadme,
 }) => {
   const [selectedTemplate, setSelectedTemplate] = useState('minimal');
+  const bottomRef = useRef<HTMLDivElement | null>(null);
   const [Loading, setLoading] = useState<boolean>(false);
   const { formData } = useForm();
   const { GetHCatResponseApi } = useAuth();
@@ -74,6 +77,20 @@ const ProfileReadme: React.FC<ProfileReadmeProps> = ({
       if (chatResponse) {
         console.log(chatResponse);
         setGeneratedReadme(chatResponse);
+        const projectData = prepareProjectData(chatResponse);
+        try {
+          // Send the PATCH request to update the user's profile
+          await updateUserProfile(projectData);
+      
+          toast.success('Project updated successfully!');
+        } catch (error) {
+           toast.error('Error Updating the projects')
+           const errorMessage =
+        error instanceof Error ? error.message : 'An unknown error occurred';
+          console.error(errorMessage);
+        }
+
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
         toast.success('README generated successfully');
       } else {
         console.error('Error: Chat response was empty or invalid.');
@@ -176,7 +193,7 @@ const ProfileReadme: React.FC<ProfileReadmeProps> = ({
       </button>
 
       {Loading && (
-        <div className="fixed inset-0 bg-white/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-white/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50" ref={bottomRef}>
           <GithubLoader />
           <span className="sr-only">Loading repositories...</span>
         </div>
