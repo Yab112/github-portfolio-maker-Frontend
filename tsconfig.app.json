@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "react",  
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "esModuleInterop": true,
+    "module": "ESNext",
     "moduleResolution": "Bundler",
-    "module": "es2015",
-    "skipLibCheck": true,
+    "types": ["vite/client", "jest", "@testing-library/jest-dom"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "target": "ES2022",
     "strict": true
   },
-  "include": ["src"]
+  "include": ["vite.config.ts", "src/**/*.ts", "src/**/*.tsx"]
 }
