@@ -77,12 +77,11 @@ const ProfileReadme: React.FC<ProfileReadmeProps> = ({
       if (chatResponse) {
         console.log(chatResponse);
         setGeneratedReadme(chatResponse);
-        const projectData = prepareProjectData(chatResponse);
+        const category = 'Profile';
+        const projectData = prepareProjectData(chatResponse,category);
         try {
           // Send the PATCH request to update the user's profile
           await updateUserProfile(projectData);
-      
-          toast.success('Project updated successfully!');
         } catch (error) {
            toast.error('Error Updating the projects')
            const errorMessage =

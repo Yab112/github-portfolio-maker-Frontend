@@ -55,14 +55,18 @@ export interface FormContextType {
   formData: FormData;
   ProjectgeneratedReadme: string;
   setProjectgeneratedReadme: (generatedReadme: string) => void;
+  generatedReadme: string;
+  setgeneratedReadme: (generatedReadme: string) => void;
   ProfilegeneratedReadme: string;
-  setProfileProjectgeneratedReadme: (generatedReadme: string) => void;
+  setProfilegeneratedReadme: (generatedReadme: string) => void;
   updatePersonalData: (personalData: FormData['personalData']) => void;
   updateWorkData: (workData: FormData['work']) => void;
   updateSkillsData: (skillsData: FormData['skills']) => void;
   updateSocialData: (socialData: FormData['social']) => void;
   updateAddOnsData: (addOnsData: FormData['addOns']) => void;
   submitForm: () => Promise<void>;
+  selectedReadme: string;
+  setSelectedReadme: (readme: string) => void;
 }
 
 const FormContext = createContext<FormContextType | null>(null);

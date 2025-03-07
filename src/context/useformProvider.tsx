@@ -4,13 +4,12 @@ import FormContext, { FormData, FormContextType } from './useFormContext';
 interface FormProviderProps {
   children: ReactNode;
 }
-// ProjectgeneratedReadme: string;
-//   ProjectsetGeneratedReadme: (generatedReadme: string) => void;
-//   ProfilegeneratedReadme: string;
-//   ProfilesetGeneratedReadme: (generatedReadme: string) => void;
+
 const FormProvider = ({ children }: FormProviderProps) => {
   const [ProjectgeneratedReadme, setProjectgeneratedReadme] = useState('');
-  const [ProfilegeneratedReadme, setProfileProjectgeneratedReadme] = useState('');
+  const [ProfilegeneratedReadme, setProfilegeneratedReadme] = useState('');
+  const [generatedReadme, setgeneratedReadme] = useState('');
+  const [selectedReadme, setSelectedReadme] = useState('');
   const [formData, setFormData] = useState<FormData>({
     personalData: {
       title: '',
@@ -20,7 +19,8 @@ const FormProvider = ({ children }: FormProviderProps) => {
       currentWork: '',
       collaborationInterests: [],
       learningGoals: [],
-      workExperience: 'i have been working on the backend side of the project in the nomads company',
+      workExperience:
+        'i have been working on the backend side of the project in the nomads company',
       availableForWork: false,
       preferredWorkMode: 'Remote',
       techStackUsed: [],
@@ -113,7 +113,14 @@ const FormProvider = ({ children }: FormProviderProps) => {
     updateSocialData,
     updateAddOnsData,
     submitForm,
-    ProjectgeneratedReadme, setProjectgeneratedReadme,ProfilegeneratedReadme, setProfileProjectgeneratedReadme
+    ProjectgeneratedReadme,
+    setProjectgeneratedReadme,
+    ProfilegeneratedReadme,
+    setProfilegeneratedReadme,
+    generatedReadme,
+    setgeneratedReadme,
+    selectedReadme,
+    setSelectedReadme,
   };
 
   return <FormContext.Provider value={value}>{children}</FormContext.Provider>;

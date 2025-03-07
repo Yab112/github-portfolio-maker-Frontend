@@ -16,6 +16,7 @@ export interface UserData {
   authProvider?: string;
   failedLoginAttempts?: number;
   projects?: Array<{
+    category: string;
     key: string;
     value: string;
     _id: string;

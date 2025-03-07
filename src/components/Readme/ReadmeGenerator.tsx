@@ -1,27 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileCode, User } from '../icons/Icons';
 import ProjectReadme from './ProjectReadme';
 import ProfileReadme from './ProfileReadme';
 import AiChat from '../ai/AiChat';
 import ReadmePreview from './ReadmePreview';
-import { useForm } from "../../hooks/useForm";
+import { useForm } from '../../hooks/useForm';
 
 const ReadmeGenerator: React.FC = () => {
-  const { ProjectgeneratedReadme, setProjectgeneratedReadme,ProfilegeneratedReadme, setProfileProjectgeneratedReadme} = useForm();
-  let generatedReadme = ""
+  const {
+    setProjectgeneratedReadme,
+    setProfilegeneratedReadme,
+    generatedReadme,
+    setgeneratedReadme,
+    selectedReadme,
+  } = useForm();
   const [activeTab, setActiveTab] = useState<'project' | 'profile' | 'ai'>(
     'project'
   );
-  // const [generatedReadme, setGeneratedReadme] = useState('');
+
+  useEffect(() => {
+    if (selectedReadme) {
+      setgeneratedReadme(selectedReadme);
+    }
+  }, [selectedReadme]);
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'project':
-        generatedReadme = ProjectgeneratedReadme
         return <ProjectReadme setGeneratedReadme={setProjectgeneratedReadme} />;
       case 'profile':
-        generatedReadme = ProfilegeneratedReadme
-        return <ProfileReadme setGeneratedReadme={setProfileProjectgeneratedReadme} />;
+        return <ProfileReadme setGeneratedReadme={setProfilegeneratedReadme} />;
       case 'ai':
         return <AiChat />;
       default:
@@ -32,7 +40,6 @@ const ReadmeGenerator: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex border-b border-gray-200 dark:border-gray-700">
-
         <button
           className={`px-4 py-2 font-medium cursor-pointer ${
             activeTab === 'project'
@@ -78,9 +85,7 @@ const ReadmeGenerator: React.FC = () => {
 
       {renderTabContent()}
 
-      {activeTab !== 'ai'
-        ? generatedReadme && <ReadmePreview readme={generatedReadme} />
-        : ''}
+      {generatedReadme && <ReadmePreview readme={generatedReadme} />}
     </div>
   );
 };

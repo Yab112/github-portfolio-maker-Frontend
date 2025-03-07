@@ -68,12 +68,11 @@ const ProjectReadme: React.FC<ProjectReadmeProps> = ({
       const chatresponse = await GetHCatResponseApi(finalPrompt);
       if (chatresponse) {
         setGeneratedReadme(chatresponse);
-        const projectData = prepareProjectData(chatresponse,selectedRepo);
+        const category = 'Project';
+        const projectData = prepareProjectData(chatresponse,selectedRepo,category);
         try {
           // Send the PATCH request to update the user's profile
           await updateUserProfile(projectData);
-
-          toast.success('Project updated successfully!');
           getMe()
         } catch (error) {
           toast.error('Error Updating the projects');
