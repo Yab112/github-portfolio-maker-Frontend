@@ -4,9 +4,13 @@ import FormContext, { FormData, FormContextType } from './useFormContext';
 interface FormProviderProps {
   children: ReactNode;
 }
-
+// ProjectgeneratedReadme: string;
+//   ProjectsetGeneratedReadme: (generatedReadme: string) => void;
+//   ProfilegeneratedReadme: string;
+//   ProfilesetGeneratedReadme: (generatedReadme: string) => void;
 const FormProvider = ({ children }: FormProviderProps) => {
-  const [generatedReadme, setGeneratedReadme] = useState('');
+  const [ProjectgeneratedReadme, setProjectgeneratedReadme] = useState('');
+  const [ProfilegeneratedReadme, setProfileProjectgeneratedReadme] = useState('');
   const [formData, setFormData] = useState<FormData>({
     personalData: {
       title: '',
@@ -109,8 +113,7 @@ const FormProvider = ({ children }: FormProviderProps) => {
     updateSocialData,
     updateAddOnsData,
     submitForm,
-    generatedReadme, 
-    setGeneratedReadme
+    ProjectgeneratedReadme, setProjectgeneratedReadme,ProfilegeneratedReadme, setProfileProjectgeneratedReadme
   };
 
   return <FormContext.Provider value={value}>{children}</FormContext.Provider>;

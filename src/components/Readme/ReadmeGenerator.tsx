@@ -7,7 +7,8 @@ import ReadmePreview from './ReadmePreview';
 import { useForm } from "../../hooks/useForm";
 
 const ReadmeGenerator: React.FC = () => {
-  const { setGeneratedReadme ,generatedReadme} = useForm();
+  const { ProjectgeneratedReadme, setProjectgeneratedReadme,ProfilegeneratedReadme, setProfileProjectgeneratedReadme} = useForm();
+  let generatedReadme = ""
   const [activeTab, setActiveTab] = useState<'project' | 'profile' | 'ai'>(
     'project'
   );
@@ -16,9 +17,11 @@ const ReadmeGenerator: React.FC = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'project':
-        return <ProjectReadme setGeneratedReadme={setGeneratedReadme} />;
+        generatedReadme = ProjectgeneratedReadme
+        return <ProjectReadme setGeneratedReadme={setProjectgeneratedReadme} />;
       case 'profile':
-        return <ProfileReadme setGeneratedReadme={setGeneratedReadme} />;
+        generatedReadme = ProfilegeneratedReadme
+        return <ProfileReadme setGeneratedReadme={setProfileProjectgeneratedReadme} />;
       case 'ai':
         return <AiChat />;
       default:
