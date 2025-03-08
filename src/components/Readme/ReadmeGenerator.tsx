@@ -72,7 +72,7 @@ const ReadmeGenerator: React.FC = () => {
       )}
 
       {/* Preview the last generated README on initial load */}
-      {activeTab !=='ai' && !ProjectgeneratedReadme && !ProfilegeneratedReadme && (
+      {(activeTab === 'project' || activeTab === 'profile') && !ProjectgeneratedReadme && !ProfilegeneratedReadme && (
         <ReadmePreview
           readme={ProjectgeneratedReadme || ProfilegeneratedReadme || ''}
         />
