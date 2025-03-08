@@ -66,7 +66,7 @@ const AiChat: React.FC = () => {
 
   return (
     <div className="bg-white/30 dark:bg-transparent rounded-xl p-8 backdrop-blur-md border border-white/20 dark:border-gray-700/50 shadow-xl w-full max-w-4xl mx-auto">
-      <div className="relative h-[650px] flex flex-col">
+      <div className="relative h-[580px] flex flex-col">
         {/* Chat Display Container */}
         <div
           ref={chatContainerRef}
