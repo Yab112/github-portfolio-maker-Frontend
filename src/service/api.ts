@@ -6,7 +6,7 @@ interface Project {
 
 // Create a new instance of axios
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3001/api/v1",
+  baseURL: import.meta.env.VITE_API_URL || "https://github-portfolio-maker-backend-ptun.vercel.app/api/v1",
   withCredentials: true, 
 });
 

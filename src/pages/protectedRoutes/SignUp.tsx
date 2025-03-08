@@ -75,7 +75,7 @@ const SignUp = () => {
   };
 
   const loginWithGitHub = () => {
-    window.location.href = "http://localhost:3001/api/v1/auth/github";
+    window.location.href = "https://github-portfolio-maker-backend-ptun.vercel.app/api/v1/auth/github";
   };
   
 
