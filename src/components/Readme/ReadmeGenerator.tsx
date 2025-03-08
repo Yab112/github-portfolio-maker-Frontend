@@ -55,7 +55,7 @@ const ReadmeGenerator: React.FC = () => {
           }`}
           onClick={() => setActiveTab('ai')}
         >
-          <div className="flex items-center gap-2 cursor-pointe">
+          <div className="flex items-center gap-2 cursor-pointer">
             <FileCode className="w-4 h-4" />
             Modify With AI
           </div>
@@ -72,7 +72,7 @@ const ReadmeGenerator: React.FC = () => {
       )}
 
       {/* Preview the last generated README on initial load */}
-      {!ProjectgeneratedReadme && !ProfilegeneratedReadme && (
+      {activeTab !=='ai' && !ProjectgeneratedReadme && !ProfilegeneratedReadme && (
         <ReadmePreview
           readme={ProjectgeneratedReadme || ProfilegeneratedReadme || ''}
         />
