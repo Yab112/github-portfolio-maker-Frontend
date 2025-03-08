@@ -13,8 +13,8 @@ import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
 import GithubLoader from '../GithubLoader';
 import { ReadmePrompt } from '../../../data/prompt';
-import {prepareProjectData} from '../../../utils/prepareProjectData '
-import {updateUserProfile} from "../../service/api"
+import { prepareProjectData } from '../../../utils/prepareProjectData';
+import { updateUserProfile } from '../../service/api';
 
 interface ProfileReadmeProps {
   setGeneratedReadme: (readme: string) => void;
@@ -28,11 +28,12 @@ const ProfileReadme: React.FC<ProfileReadmeProps> = ({
   const [Loading, setLoading] = useState<boolean>(false);
   const { formData } = useForm();
   const { GetHCatResponseApi } = useAuth();
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   const handleGetRepoContents = async (): Promise<void> => {
     setLoading(true);
     try {
-      toast('Start successfully fetching README...');
+      toast('Started Generating README...');
 
       console.log('DEBUG: formData', formData); // Debugging
 
@@ -78,18 +79,24 @@ const ProfileReadme: React.FC<ProfileReadmeProps> = ({
         console.log(chatResponse);
         setGeneratedReadme(chatResponse);
         const category = 'Profile';
-        const projectData = prepareProjectData(chatResponse,category);
+        const projectData = prepareProjectData(chatResponse, category);
+        console.log('DEBUG: projectData', projectData);
         try {
           // Send the PATCH request to update the user's profile
           await updateUserProfile(projectData);
         } catch (error) {
-           toast.error('Error Updating the projects')
-           const errorMessage =
-        error instanceof Error ? error.message : 'An unknown error occurred';
+          toast.error('Error Updating the projects');
+          const errorMessage =
+            error instanceof Error
+              ? error.message
+              : 'An unknown error occurred';
           console.error(errorMessage);
         }
 
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (!hasScrolled) {
+          bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+          setHasScrolled(true);
+        }
         toast.success('README generated successfully');
       } else {
         console.error('Error: Chat response was empty or invalid.');
@@ -192,7 +199,10 @@ const ProfileReadme: React.FC<ProfileReadmeProps> = ({
       </button>
 
       {Loading && (
-        <div className="fixed inset-0 bg-white/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50" ref={bottomRef}>
+        <div
+          className="fixed inset-0 bg-white/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50"
+          ref={bottomRef}
+        >
           <GithubLoader />
           <span className="sr-only">Loading repositories...</span>
         </div>

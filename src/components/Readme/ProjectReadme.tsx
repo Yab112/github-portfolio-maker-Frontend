@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import RepoDropdown from './RepoDropdown';
 import PastePathInput from './PastePathInput';
 import { useAuth } from '../../hooks/useAuth';
@@ -21,6 +21,8 @@ const ProjectReadme: React.FC<ProjectReadmeProps> = ({
   const [selectedRepo, setSelectedRepo] = useState('');
   const [repos, setrepos] = useState<string[]>([]);
   const [Loading, setLoading] = useState<boolean>(false);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
     const fetchRepos = async () => {
@@ -69,11 +71,15 @@ const ProjectReadme: React.FC<ProjectReadmeProps> = ({
       if (chatresponse) {
         setGeneratedReadme(chatresponse);
         const category = 'Project';
-        const projectData = prepareProjectData(chatresponse,selectedRepo,category);
+        const projectData = prepareProjectData(
+          chatresponse,
+          selectedRepo,
+          category
+        );
         try {
           // Send the PATCH request to update the user's profile
           await updateUserProfile(projectData);
-          getMe()
+          getMe();
         } catch (error) {
           toast.error('Error Updating the projects');
           const errorMessage =
@@ -81,6 +87,10 @@ const ProjectReadme: React.FC<ProjectReadmeProps> = ({
               ? error.message
               : 'An unknown error occurred';
           console.error(errorMessage);
+        }
+        if (!hasScrolled) {
+          bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+          setHasScrolled(true);
         }
         toast.success('README generated successfully');
       } else {
@@ -138,6 +148,7 @@ const ProjectReadme: React.FC<ProjectReadmeProps> = ({
           <span className="sr-only">Loading repositories...</span>
         </div>
       )}
+      <div ref={bottomRef} />
     </div>
   );
 };

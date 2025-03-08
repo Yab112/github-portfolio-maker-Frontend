@@ -1,5 +1,6 @@
-import { useState, ReactNode } from 'react';
+import { useState, ReactNode} from 'react';
 import FormContext, { FormData, FormContextType } from './useFormContext';
+import { AiChat, ProfileReadme, ProjectReadme } from '../components';
 
 interface FormProviderProps {
   children: ReactNode;
@@ -9,7 +10,9 @@ const FormProvider = ({ children }: FormProviderProps) => {
   const [ProjectgeneratedReadme, setProjectgeneratedReadme] = useState('');
   const [ProfilegeneratedReadme, setProfilegeneratedReadme] = useState('');
   const [generatedReadme, setgeneratedReadme] = useState('');
-  const [selectedReadme, setSelectedReadme] = useState('');
+  const [activeTab, setActiveTab] = useState<'project' | 'profile' | 'ai'>(
+      'project'
+    );
   const [formData, setFormData] = useState<FormData>({
     personalData: {
       title: '',
@@ -105,6 +108,18 @@ const FormProvider = ({ children }: FormProviderProps) => {
     }
   };
 
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'project':
+        return <ProjectReadme setGeneratedReadme={setProjectgeneratedReadme} />;
+      case 'profile':
+        return <ProfileReadme setGeneratedReadme={setProfilegeneratedReadme} />;
+      case 'ai':
+        return <AiChat />;
+      default:
+        return null;
+    }
+  };
   const value: FormContextType = {
     formData,
     updatePersonalData,
@@ -119,8 +134,8 @@ const FormProvider = ({ children }: FormProviderProps) => {
     setProfilegeneratedReadme,
     generatedReadme,
     setgeneratedReadme,
-    selectedReadme,
-    setSelectedReadme,
+    activeTab, setActiveTab,
+    renderTabContent
   };
 
   return <FormContext.Provider value={value}>{children}</FormContext.Provider>;

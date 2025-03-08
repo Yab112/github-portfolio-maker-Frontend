@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, JSX } from 'react';
 
 // Define the types for form data and actions
 export interface FormData {
@@ -51,12 +51,17 @@ export interface FormData {
   };
 }
 
+type tab = 'project' | 'profile' | 'ai'
+
 export interface FormContextType {
   formData: FormData;
+  activeTab:string,
+  setActiveTab: (tab:tab) => void;
   ProjectgeneratedReadme: string;
   setProjectgeneratedReadme: (generatedReadme: string) => void;
   generatedReadme: string;
   setgeneratedReadme: (generatedReadme: string) => void;
+  renderTabContent : () => JSX.Element | null
   ProfilegeneratedReadme: string;
   setProfilegeneratedReadme: (generatedReadme: string) => void;
   updatePersonalData: (personalData: FormData['personalData']) => void;
@@ -65,8 +70,6 @@ export interface FormContextType {
   updateSocialData: (socialData: FormData['social']) => void;
   updateAddOnsData: (addOnsData: FormData['addOns']) => void;
   submitForm: () => Promise<void>;
-  selectedReadme: string;
-  setSelectedReadme: (readme: string) => void;
 }
 
 const FormContext = createContext<FormContextType | null>(null);

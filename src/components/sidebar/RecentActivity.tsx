@@ -1,43 +1,58 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useForm } from '../../hooks/useForm';
 
 const RecentActivity: React.FC = () => {
   const { user } = useAuth();
-  const { setSelectedReadme } = useForm();
+  const { setProfilegeneratedReadme, setProjectgeneratedReadme, setActiveTab } =
+    useForm();
+  console.log('DEBUG: user', user);
+
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   const recentActivity =
     user?.projects?.map((project) => ({
       project: project.key,
-      time: new Date(project._id).toLocaleString(),
       value: project.value,
       category: project.category,
     })) || [];
 
   const handleclick = (projectkey: string) => {
+    console.log('Button clicked:', projectkey);
     const selectedProject = user?.projects?.find(
       (project) => project.key === projectkey
     );
-    if (selectedProject) {
-      setSelectedReadme(selectedProject.value);
+    // console.log('Button clicked:', selectedProject);
+    if (selectedProject?.category === 'Project') {
+      setProjectgeneratedReadme(selectedProject.value);
+      setActiveTab('project');
+    } else if (selectedProject?.category === 'Profile') {
+      setProfilegeneratedReadme(selectedProject.value);
+      setActiveTab('profile');
+    }
+    if (!hasScrolled) {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+      setHasScrolled(true);
     }
   };
 
   return (
     <div className="space-y-2 overflow-y-auto">
-      {recentActivity.map((activity, i) => (
-        <div
-          key={i}
-          className="p-2 text-sm rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-        >
-          <button
+      {recentActivity
+        .slice(0)
+        .reverse()
+        .map((activity, i) => (
+          <div
+            key={i}
+            className="p-2 text-sm rounded-md hover:bg-gray-200 dark:hover:bg-blue-700 cursor-pointer dark:text-gray-300"
             onClick={() => handleclick(activity.project)}
-            className="font-medium text-gray-800 dark:text-slate-100/90"
           >
             {activity.project}
-          </button>
-        </div>
-      ))}
+            {activity.category === 'Project' ? ` (project)` : ' (Profile)'}
+          </div>
+        ))}
+      <div ref={bottomRef} />
     </div>
   );
 };

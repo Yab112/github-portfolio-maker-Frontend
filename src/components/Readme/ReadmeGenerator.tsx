@@ -1,41 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { FileCode, User } from '../icons/Icons';
-import ProjectReadme from './ProjectReadme';
-import ProfileReadme from './ProfileReadme';
-import AiChat from '../ai/AiChat';
 import ReadmePreview from './ReadmePreview';
 import { useForm } from '../../hooks/useForm';
 
 const ReadmeGenerator: React.FC = () => {
   const {
-    setProjectgeneratedReadme,
-    setProfilegeneratedReadme,
-    generatedReadme,
-    setgeneratedReadme,
-    selectedReadme,
+    ProfilegeneratedReadme,
+    ProjectgeneratedReadme,
+    activeTab,
+    setActiveTab,
+    renderTabContent,
   } = useForm();
-  const [activeTab, setActiveTab] = useState<'project' | 'profile' | 'ai'>(
-    'project'
-  );
 
   useEffect(() => {
-    if (selectedReadme) {
-      setgeneratedReadme(selectedReadme);
-    }
-  }, [selectedReadme]);
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'project':
-        return <ProjectReadme setGeneratedReadme={setProjectgeneratedReadme} />;
-      case 'profile':
-        return <ProfileReadme setGeneratedReadme={setProfilegeneratedReadme} />;
-      case 'ai':
-        return <AiChat />;
-      default:
-        return null;
-    }
-  };
+    renderTabContent();
+  }, [activeTab, ProjectgeneratedReadme, ProfilegeneratedReadme]);
 
   return (
     <div className="space-y-4">
@@ -85,7 +64,19 @@ const ReadmeGenerator: React.FC = () => {
 
       {renderTabContent()}
 
-      {generatedReadme && <ReadmePreview readme={generatedReadme} />}
+      {activeTab === 'project' && ProjectgeneratedReadme && (
+        <ReadmePreview readme={ProjectgeneratedReadme} />
+      )}
+      {activeTab === 'profile' && ProfilegeneratedReadme && (
+        <ReadmePreview readme={ProfilegeneratedReadme} />
+      )}
+
+      {/* Preview the last generated README on initial load */}
+      {!ProjectgeneratedReadme && !ProfilegeneratedReadme && (
+        <ReadmePreview
+          readme={ProjectgeneratedReadme || ProfilegeneratedReadme || ''}
+        />
+      )}
     </div>
   );
 };
