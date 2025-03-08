@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 interface Project {
   value: string;
   key: string;
@@ -6,28 +6,35 @@ interface Project {
 
 // Create a new instance of axios
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://github-portfolio-maker-backend-ptun.vercel.app/api/v1",
-  withCredentials: true, 
+  baseURL:
+    import.meta.env.VITE_API_URL ||
+    'https://github-portfolio-maker-backend-ptun.vercel.app/api/v1',
+  withCredentials: true,
 });
 
 api.interceptors.response.use(
-  (response) => response,  
+  (response) => response,
   async (error) => {
-
-    if (error.response?.status === 401 && error.config && !error.config.__isRetryRequest) {
+    if (
+      error.response?.status === 401 &&
+      error.config &&
+      !error.config.__isRetryRequest
+    ) {
       try {
         error.config.__isRetryRequest = true;
 
-        await api.post("/auth/refresh-token");
+        await api.post('/auth/refresh-token');
 
         return api(error.config);
       } catch (refreshError) {
-        console.error("Refresh token expired or invalid. Redirecting to login...");
-        window.location.href = "/login";
+        console.error(
+          'Refresh token expired or invalid. Redirecting to login...'
+        );
+        window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }
-    return Promise.reject(error); 
+    return Promise.reject(error);
   }
 );
 
@@ -35,70 +42,64 @@ api.interceptors.response.use(
 
 export const getMe = async () => {
   try {
-    const response = await api.get("/users/me");
+    const response = await api.get('/users/me');
     return response.data;
   } catch (error) {
-    console.error("Error fetching user:", error);
+    console.error('Error fetching user:', error);
     return null;
   }
 };
 
 export const login = (email: string, password: string) => {
-  return api.post("/auth/login", { email, password });
+  return api.post('/auth/login', { email, password });
 };
 
 export const logout = () => {
-  return api.post("auth/logout");
+  return api.post('auth/logout');
 };
 
-export const SignUp = (email: string, password: string, Githubusername: string) => {
-  return api.post("/auth/register", { email, password, Githubusername });
+export const SignUp = (
+  email: string,
+  password: string,
+  Githubusername: string
+) => {
+  return api.post('/auth/register', { email, password, Githubusername });
 };
 
 export const verifyOtp = async (otp: string) => {
   try {
-    console.log("DEBUG: OTP sent to backend", otp);
-    const response = await api.post("/auth/verify", { otp });
-    // console.log("Response from backend:", response);
+    console.log('DEBUG: OTP sent to backend', otp);
+    const response = await api.post('/auth/verify', { otp });
     return response;
   } catch (error) {
-    console.error("OTP verification failed:", error);
+    console.error('OTP verification failed:', error);
     throw error;
   }
 };
 
-
-
-export const getChatResponse = async (prompt:string) =>{
+export const getChatResponse = async (prompt: string) => {
   try {
-    const chatresponse =  api.post("users/chat",{prompt});
-    return chatresponse
+    const chatresponse = api.post('users/chat', { prompt });
+    return chatresponse;
   } catch (error) {
-    console.log(error)
-    throw error
+    console.error('Error fetching chat response:', error);
+    throw error;
   }
-}
-
-
+};
 
 export const OtpResend = async () => {
-   const response = await api.post("auth/resend-otp");
-   return response;
-}
+  const response = await api.post('auth/resend-otp');
+  return response;
+};
 
-
-
-export const updateUserProfile = async (newProject:Project) => {
-
+export const updateUserProfile = async (newProject: Project) => {
   try {
-      const response = await api.patch('users/update', 
-          { projects: newProject } 
-      );
+    const response = await api.patch('users/update', { projects: newProject });
 
-      console.log('Profile updated:', response.data);
+    console.log('Profile updated:', response.data);
   } catch (error) {
     const errorMessage =
-        error instanceof Error ? error.message : 'An unknown error occurred';
-      console.error('Error:', errorMessage);
+      error instanceof Error ? error.message : 'An unknown error occurred';
+    console.error('Error:', errorMessage);
   }
 };
